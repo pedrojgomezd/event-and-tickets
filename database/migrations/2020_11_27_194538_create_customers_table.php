@@ -18,7 +18,7 @@ class CreateCustomersTable extends Migration
             $table->string('name');
             $table->string('document', 20)->nullable();
             $table->date('birth_day')->nullable();
-            $table->string('email')->uniqid();
+            $table->string('email');
             $table->string('phone', 20)->nullable();
             $table->unsignedBigInteger('created_by');
             $table->timestamps();

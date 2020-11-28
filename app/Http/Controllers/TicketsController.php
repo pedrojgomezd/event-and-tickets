@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreTicketRequest;
 
 class TicketsController extends Controller
 {
@@ -11,9 +11,9 @@ class TicketsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \App\Http\Requests\StoreTicketRequest
      */
-    public function store(Request $request)
+    public function store(StoreTicketRequest $request)
     {
         $data = $request->all();
 
@@ -24,17 +24,6 @@ class TicketsController extends Controller
         ]);
         
         return response()->json(['data' => 'success'], 201);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
     
     /**

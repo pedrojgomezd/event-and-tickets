@@ -9,7 +9,15 @@ class Meetup extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'cover_path', 'date', 'place', 'description', 'quantity', 'sold'];
+    protected $fillable = [
+        'name', 
+        'cover_path', 
+        'date', 
+        'place', 
+        'description', 
+        'quantity', 
+        'sold'
+    ];
 
     public function creator()
     {

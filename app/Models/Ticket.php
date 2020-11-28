@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Events\TicketCreated;
+use App\Events\TicketCreating;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -45,14 +47,11 @@ class Ticket extends Model
     public function switchUsed()
     {
         if(!$this->is_used) {
-            
             $this->update([
                 'is_used' => true
             ]);
-
             return true;
         }
-
         return false;
     }
 }

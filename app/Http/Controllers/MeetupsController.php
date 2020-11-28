@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreMeetupRequest;
 use App\Http\Resources\Meetups;
 use App\Models\Meetup;
 use Illuminate\Http\Request;
@@ -27,25 +28,17 @@ class MeetupsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreMeetupRequest $request)
     {
         $data = $request->all();
         
-        $file = $request->file('cover');
-        $coverPath = $file->storeAs('covers', $file->getClientOriginalName());
-        
         $meetup = $request->user()
             ->meetups()
-            ->create([
-                'name' => $data['name'],
-                'date' => $data['date'],
-                'place' => $data['place'],
-                'description' => $data['description'],
-                'quantity' => $data['quantity'],
-                'cover_path' => $coverPath
-            ]);
+            ->create($data);
 
-        return response()->json($meetup, 201);
+        $resource = Meetups::make($meetup);
+
+        return response()->json(['data' => $resource], 201);
     }
 
     /**
