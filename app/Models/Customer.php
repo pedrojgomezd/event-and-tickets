@@ -11,6 +11,8 @@ class Customer extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name', 'document', 'birth_day', 'email', 'phone'];
+
     public function tickets()
     {
         return $this->hasMany(Ticket::class);

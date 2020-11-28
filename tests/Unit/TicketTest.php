@@ -30,8 +30,8 @@ class TicketTest extends TestCase
         $ticket = Ticket::factory()->create([
             'meetup_id' => $meetup->id
         ]);
-
-        $this->assertEquals($meetup->toArray(), $ticket->meetup->toArray());
+        
+        $this->assertEquals($meetup->fresh()->toArray(), $ticket->meetup->fresh()->toArray());
     }
 
     public function test_a_tickect_can_has_a_customer_assign()
@@ -54,5 +54,19 @@ class TicketTest extends TestCase
         ]);
 
         $this->assertEquals($seller->toArray(), $ticket->seller->toArray());
+    }
+
+    public function test_a_ticket_can_change_statu_used()
+    {
+        $ticket = Ticket::factory()->create([
+            'is_used' => false
+        ]);
+
+        $this->assertEquals(false, $ticket->is_used);
+        
+        $this->assertEquals(true, $ticket->switchUsed());
+        
+        $this->assertEquals(true, $ticket->is_used);
+
     }
 }

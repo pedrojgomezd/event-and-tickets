@@ -25,4 +25,10 @@ class Meetup extends Model
     {
         return $this->belongsToMany(Customer::class, Ticket::class);
     }
+
+    public function getAvailabilityAttribute()
+    {
+        return ($this->quantity - $this->sold);
+    }
+
 }

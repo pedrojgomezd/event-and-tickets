@@ -18,7 +18,7 @@ class CreateTicketsTable extends Migration
             $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('meetup_id');
             $table->string('code', 9)->uniqid();
-            $table->boolean("is_used");
+            $table->boolean("is_used")->default(false);
             $table->unsignedBigInteger('sold_by');
             $table->timestamps();
 
