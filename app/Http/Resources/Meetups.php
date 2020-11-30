@@ -17,8 +17,8 @@ class Meetups extends JsonResource
         return [
             'id' => $this->id, 
             'name' => $this->name, 
-            'cover_path' => $this->cover_path, 
-            'date' => $this->date, 
+            'cover_path' => asset(str_replace('public/', '', $this->cover_path)), 
+            'date' => $this->date,
             'place' => $this->place, 
             'description' => $this->description, 
             'quantity' => $this->quantity, 

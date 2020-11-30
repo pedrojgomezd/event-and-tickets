@@ -36,7 +36,7 @@ class StoreMeetupRequest extends FormRequest
     protected function prepareForValidation()
     {
         $file = $this->file('cover');
-        $coverPath = $file->storeAs('covers', $file->getClientOriginalName());
+        $coverPath = $file->storeAs('public/covers', $file->getClientOriginalName());
 
         $this->merge([
             'cover_path' => $coverPath,

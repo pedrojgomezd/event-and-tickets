@@ -49,11 +49,47 @@ class CustomersTest extends TestCase
             'customer_id' => $customer->id
         ]);
 
-        $customer->load('tickets');
-
         $resourceCustomer = Customers::make($customer)->response()->getData(true);
 
         $response = $this->getJson("api/customers/{$customer->id}");
+
+        $response->assertSuccessful();
+
+        $response->assertExactJson($resourceCustomer);        
+    }
+
+    public function test_a_user_can_see_details_customers_by_id_and_load_tickets()
+    {
+        $this->singInApi();
+
+        $customer = Customer::factory()->create();
+
+        Ticket::factory()->count(3)->create([
+            'customer_id' => $customer->id
+        ]);
+
+        $resourceCustomer = Customers::make($customer->load('tickets'))->response()->getData(true);
+
+        $response = $this->getJson("api/customers/{$customer->id}?tickets=1");
+
+        $response->assertSuccessful();
+
+        $response->assertExactJson($resourceCustomer);        
+    }
+
+    public function test_a_user_can_see_details_customers_by_id_and_load_tickets_meetups()
+    {
+        $this->singInApi();
+
+        $customer = Customer::factory()->create();
+
+        Ticket::factory()->count(3)->create([
+            'customer_id' => $customer->id
+        ]);
+
+        $resourceCustomer = Customers::make($customer->load('tickets.meetup'))->response()->getData(true);
+
+        $response = $this->getJson("api/customers/{$customer->id}?tickets=1&meetup=1");
 
         $response->assertSuccessful();
 

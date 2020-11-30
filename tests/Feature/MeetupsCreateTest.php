@@ -40,6 +40,6 @@ class MeetupsCreateTest extends TestCase
         
         unset($data['cover']);
 
-        $response->assertJson(['data' => $data]);
+        $response->assertJson($data);
     }
 }

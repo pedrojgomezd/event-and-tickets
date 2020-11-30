@@ -31,13 +31,32 @@ class MeetupsTest extends TestCase
        $response->assertExactJson($meetupsResource);
    }
 
+   public function test_a_user_can_see_details_meetup()
+   {
+       $this->singInApi();
+
+       $meetup = Meetup::factory()->create();
+
+       Ticket::factory()->count(3)->create([
+           'meetup_id' => $meetup->id
+       ]);
+
+       $meetupResource = Meetups::make($meetup->fresh())
+        ->response()
+        ->getData(true);
+
+       $response = $this->getJson("api/meetups/{$meetup->id}");
+
+       $response->assertExactJson($meetupResource);
+   }
+
    public function test_a_user_can_see_details_meetup_and_conatins_list_tickets()
    {
        $this->singInApi();
 
        $meetup = Meetup::factory()->create();
 
-       $ticekts = Ticket::factory()->count(3)->create([
+       Ticket::factory()->count(3)->create([
            'meetup_id' => $meetup->id
        ]);
 
@@ -45,7 +64,26 @@ class MeetupsTest extends TestCase
         ->response()
         ->getData(true);
 
-       $response = $this->getJson("api/meetups/{$meetup->id}");
+       $response = $this->getJson("api/meetups/{$meetup->id}?tickets=1");
+
+       $response->assertExactJson($meetupResource);
+   }
+   
+   public function test_a_user_can_see_details_meetup_and_conatins_list_tickets_with_customer()
+   {
+       $this->singInApi();
+
+       $meetup = Meetup::factory()->create();
+
+       Ticket::factory()->count(3)->create([
+           'meetup_id' => $meetup->id
+       ]);
+
+       $meetupResource = Meetups::make($meetup->fresh()->load('tickets.customer'))
+        ->response()
+        ->getData(true);
+
+       $response = $this->getJson("api/meetups/{$meetup->id}?tickets=1&customer=true");
 
        $response->assertExactJson($meetupResource);
    }
@@ -80,6 +118,5 @@ class MeetupsTest extends TestCase
         'availability' => 0,
         'message' => 'No availability'
        ]]);
-
    }
 }

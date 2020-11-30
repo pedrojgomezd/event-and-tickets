@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreMeetupRequest;
 use App\Http\Resources\Meetups;
 use App\Models\Meetup;
+use App\QueryFilters\MeetupFilters;
 use Illuminate\Http\Request;
 
 class MeetupsController extends Controller
@@ -15,11 +16,13 @@ class MeetupsController extends Controller
      * @param  Meetup  $meetup
      * @return \Illuminate\Http\Response
      */
-    public function index(Meetup $meetup)
+    public function index(MeetupFilters $filter)
     {
-        $resource = Meetups::collection($meetup->get());
+        $meetups = Meetup::filter($filter)->get();
 
-        return response()->json(['data' => $resource]);
+        $resource = Meetups::collection($meetups);
+
+        return response()->json($resource);
     }
 
     /**
@@ -38,7 +41,7 @@ class MeetupsController extends Controller
 
         $resource = Meetups::make($meetup);
 
-        return response()->json(['data' => $resource], 201);
+        return response()->json($resource, 201);
     }
 
     /**
@@ -47,11 +50,15 @@ class MeetupsController extends Controller
      * @param  Meetup  $meetup
      * @return \Illuminate\Http\Response
      */
-    public function show(Meetup $meetup)
+    public function show($id, MeetupFilters $filter)
     {
-        $resource = Meetups::make($meetup->load('tickets'));
+        $meetup = Meetup::filter($filter)
+            ->whereId($id)
+            ->first();
 
-        return response()->json(['data' => $resource]);
+        $resource = Meetups::make($meetup);
+
+        return response()->json($resource);
     }
 
     /**

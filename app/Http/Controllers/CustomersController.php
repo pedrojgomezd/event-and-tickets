@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Http\Resources\Customers;
 use App\Http\Requests\CustomerRequest;
+use App\QueryFilters\CustomerFilters;
 
 class CustomersController extends Controller
 {
@@ -13,11 +14,13 @@ class CustomersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Customer $customer)
+    public function index(CustomerFilters $filter)
     {
-        $resource = Customers::collection($customer->get());
+        $customer = Customer::filter($filter)->get();
 
-        return response()->json(['data' => $resource]);
+        $resource = Customers::collection($customer);
+
+        return response()->json($resource);
     }
 
     /**
@@ -45,11 +48,15 @@ class CustomersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Customer $customer)
+    public function show($id, CustomerFilters $filter)
     {
-        $resource = Customers::make($customer->load('tickets'));
+        $customer = Customer::filter($filter)
+            ->whereId($id)
+            ->first();
 
-        return response()->json(['data' => $resource]);
+        $resource = Customers::make($customer);
+
+        return response()->json($resource);
     }
 
     /**
@@ -67,7 +74,7 @@ class CustomersController extends Controller
 
         $resource = Customers::make($customer->fresh());
 
-        return response()->json(['data' => $resource], 204);
+        return response()->json($resource, 204);
     }   
 
     /**

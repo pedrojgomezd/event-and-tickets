@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\QueryFilters\MeetupFilters;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -37,6 +38,11 @@ class Meetup extends Model
     public function getAvailabilityAttribute()
     {
         return ($this->quantity - $this->sold);
+    }
+
+    public function scopeFilter($query, MeetupFilters $filter)
+    {
+        return $filter->apply($query);
     }
 
 }

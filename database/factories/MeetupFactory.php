@@ -31,7 +31,7 @@ class MeetupFactory extends Factory
             'place' => $this->faker->city,
             'description' => $this->faker->paragraph(),
             'quantity' => $quantity ,
-            'sold' => $quantity ,
+            'sold' => $quantity-1 ,
             'created_by' => User::factory()->create(),
         ];
     }
