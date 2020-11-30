@@ -47,8 +47,8 @@ class MeetupTest extends TestCase
         $meetup->tickets()->saveMany($tickets);
 
         $this->assertCount(3, $meetup->tickets);
-
-        $this->assertEquals($tickets[0]->toArray(), $meetup->tickets->first()->toArray());
+        
+        $this->assertEquals($tickets[0]->fresh()->load('meetup')->toArray(), $meetup->fresh()->load('tickets.meetup')->tickets->first()->toArray());
     }
 
     public function test_a_meetup_can_has_many_customer_through_tickets()
@@ -67,8 +67,17 @@ class MeetupTest extends TestCase
 
         $this->assertCount(3, $meetup->tickets);
 
-        $this->assertCount(3, $meetup->customers->toArray());
-        
+        $this->assertCount(3, $meetup->customers->toArray());   
+    }
+
+    public function test_meetups_availability_can_be_counted()
+    {
+        $meetup = Meetup::factory()->create([
+            'quantity' => 4,
+            'sold' => 2
+        ]);
+
+        $this->assertEquals(2, $meetup->availability);
     }
 
 }

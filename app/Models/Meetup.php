@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\QueryFilters\MeetupFilters;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,7 +10,15 @@ class Meetup extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'cover_path', 'date', 'place', 'description', 'quantity', 'sold'];
+    protected $fillable = [
+        'name', 
+        'cover_path', 
+        'date', 
+        'place', 
+        'description', 
+        'quantity', 
+        'sold'
+    ];
 
     public function creator()
     {
@@ -25,4 +34,15 @@ class Meetup extends Model
     {
         return $this->belongsToMany(Customer::class, Ticket::class);
     }
+
+    public function getAvailabilityAttribute()
+    {
+        return ($this->quantity - $this->sold);
+    }
+
+    public function scopeFilter($query, MeetupFilters $filter)
+    {
+        return $filter->apply($query);
+    }
+
 }

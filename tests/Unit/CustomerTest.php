@@ -34,7 +34,7 @@ class CustomerTest extends TestCase
 
         $customer->tickets()->saveMany($tickets);
 
-        $this->assertEquals($tickets[0]->toArray(), $customer->tickets->first()->toArray());
+        $this->assertEquals($tickets[0]->toArray(), $customer->tickets->load('meetup')->first()->toArray());
     }
 
     public function test_a_customer_can_has_many_meetups_through_tickets()
